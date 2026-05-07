@@ -1,9 +1,7 @@
+import MapCanvas from './components/MapCanvas'
+
 function App() {
-  return (
-    <div>
-      <h1>Terrall</h1>
-    </div>
-  )
+  return <MapCanvas />
 }
 
 export default App
