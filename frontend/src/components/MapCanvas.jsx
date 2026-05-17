@@ -1,26 +1,18 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import ColombiaMap from './ColombiaMap'
 
-function Sphere() {
+export default function MapCanvas() {
   return (
-    <mesh>
-      <sphereGeometry args={[1, 32, 32]} />
-      <meshStandardMaterial color="#1a6b3c" wireframe />
-    </mesh>
+    <Canvas
+      camera={{ position: [0, 0, 15], fov: 45 }}
+      style={{ width: '100vw', height: '100vh', background: '#0a0a0a' }}
+    >
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[10, 10, 5]} intensity={1.2} />
+      <directionalLight position={[-10, -5, -5]} intensity={0.3} />
+      <ColombiaMap />
+      <OrbitControls enableZoom={true} enablePan={true} />
+    </Canvas>
   )
 }
-
-function MapCanvas() {
-  return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <Canvas camera={{ position: [0, 0, 3] }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <Sphere />
-        <OrbitControls />
-      </Canvas>
-    </div>
-  )
-}
-
-export default MapCanvas
