@@ -4,15 +4,14 @@ import ColombiaMap from './ColombiaMap'
 
 export default function MapCanvas() {
   return (
-    <Canvas
-      camera={{ position: [0, 0, 15], fov: 45 }}
-      style={{ width: '100vw', height: '100vh', background: '#0a0a0a' }}
-    >
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 10, 5]} intensity={1.2} />
-      <directionalLight position={[-10, -5, -5]} intensity={0.3} />
-      <ColombiaMap />
-      <OrbitControls enableZoom={true} enablePan={true} />
-    </Canvas>
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <Canvas camera={{ position: [0, 0, 12], fov: 45 }}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[8, 12, 8]} intensity={1.5} />
+        <directionalLight position={[-8, -4, -4]} intensity={0.2} color='#4488ff' />
+        <ColombiaMap />
+        <OrbitControls />
+      </Canvas>
+    </div>
   )
 }
