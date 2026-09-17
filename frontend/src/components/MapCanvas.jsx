@@ -15,6 +15,23 @@ export default function MapCanvas() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      {!mapOffset && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'rgba(255,255,255,0.6)',
+          fontFamily: 'monospace',
+          fontSize: '13px',
+          letterSpacing: '0.1em',
+          zIndex: 30,
+          pointerEvents: 'none',
+        }}>
+          CARGANDO MAPA...
+        </div>
+      )}
       {label && (
         <div style={{
           position: 'absolute',

@@ -19,6 +19,7 @@ export default function CitiesLayer({ onCityHover, offset }) {
     // Limpiar grupo anterior si existe
     if (groupRef.current) {
       scene.remove(groupRef.current)
+      disposeGroup(groupRef.current)
       markersRef.current = []
     }
 
@@ -62,6 +63,7 @@ export default function CitiesLayer({ onCityHover, offset }) {
 
     return () => {
       scene.remove(group)
+      disposeGroup(group)
       markersRef.current = []
     }
   }, [scene, offset])
@@ -73,7 +75,7 @@ export default function CitiesLayer({ onCityHover, offset }) {
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(mouse, camera)
-      const hits = raycaster.intersectObjects(markersRef.current)
+      const hits = raycaster.intersectObjects(markersRef.current, false)
       if (hoveredRef.current) {
         hoveredRef.current.material.emissiveIntensity = 0.8
         hoveredRef.current.scale.setScalar(1)
@@ -106,4 +108,11 @@ export default function CitiesLayer({ onCityHover, offset }) {
   })
 
   return null
+}
+
+function disposeGroup(group) {
+  group.traverse(obj => {
+    obj.geometry?.dispose()
+    obj.material?.dispose()
+  })
 }

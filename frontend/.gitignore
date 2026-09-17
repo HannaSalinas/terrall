@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Backup del geojson sin simplificar (lo genera scripts/simplify-geojson.mjs)
+public/geo/colombia.full.geojson
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
