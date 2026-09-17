@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { DEPARTMENTS } from '../data/departments'
+import { TOURISM_STATS } from '../data/tourismStats'
 
 const TABS = [
   { key: 'transporte', label: 'Transporte' },
@@ -26,6 +27,7 @@ export default function SidePanel({ department, onClose }) {
   const isOpen = Boolean(department)
   const info = department ? DEPARTMENTS[department]?.[activeTab] : null
   const listField = LIST_FIELD[activeTab]
+  const tourismStats = department ? TOURISM_STATS[department] : null
 
   return (
     <div style={{
@@ -107,12 +109,32 @@ export default function SidePanel({ department, onClose }) {
                 Terminal principal: {info.mainTerminal}
               </p>
             )}
-            {info[listField] && (
-              <ul style={{ margin: 0, paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
-                {info[listField].map(item => (
-                  <li key={item} style={{ marginBottom: '8px' }}>{item}</li>
-                ))}
-              </ul>
+
+            {activeTab === 'turismo' && tourismStats ? (
+              <>
+                <p style={{ margin: '0 0 12px', fontSize: '13px', color: 'rgba(255,255,255,0.9)' }}>
+                  <strong style={{ color: '#ffd700' }}>{tourismStats.total.toLocaleString('es-CO')}</strong>{' '}
+                  establecimientos turísticos activos registrados
+                </p>
+                <ul style={{ margin: 0, paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
+                  {tourismStats.topCategories.map(cat => (
+                    <li key={cat.categoria} style={{ marginBottom: '8px' }}>
+                      {cat.categoria} — {cat.count.toLocaleString('es-CO')}
+                    </li>
+                  ))}
+                </ul>
+                <p style={{ marginTop: '20px', fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>
+                  Fuente: Registro Nacional de Turismo (RNT), datos.gov.co
+                </p>
+              </>
+            ) : (
+              info[listField] && (
+                <ul style={{ margin: 0, paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
+                  {info[listField].map(item => (
+                    <li key={item} style={{ marginBottom: '8px' }}>{item}</li>
+                  ))}
+                </ul>
+              )
             )}
           </>
         ) : (
