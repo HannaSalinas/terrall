@@ -7,6 +7,7 @@
 // resumen por departamento (total + top categorías).
 
 import { writeFileSync } from 'fs'
+import { toTitleCase } from './lib/text.mjs'
 
 const SOURCE_URL = 'https://www.datos.gov.co/resource/thwd-ivmp.json'
 const DATASET_PAGE = 'https://www.datos.gov.co/Comercio-Industria-y-Turismo/Registro-Nacional-de-Turismo-RNT/thwd-ivmp'
@@ -68,14 +69,6 @@ export const TOURISM_STATS = ${JSON.stringify(summary, null, 2)}
 
   writeFileSync(new URL('../src/data/tourismStats.js', import.meta.url), fileContent)
   console.log(`Escrito src/data/tourismStats.js con ${Object.keys(summary).length} departamentos.`)
-}
-
-function toTitleCase(str) {
-  return str
-    .toLowerCase()
-    .split(' ')
-    .map(w => w.length > 3 ? w.charAt(0).toUpperCase() + w.slice(1) : w)
-    .join(' ')
 }
 
 main().catch(err => {
