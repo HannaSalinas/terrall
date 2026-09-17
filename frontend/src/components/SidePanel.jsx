@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { DEPARTMENTS } from '../data/departments'
 
 const TABS = [
   { key: 'transporte', label: 'Transporte' },
@@ -7,12 +8,12 @@ const TABS = [
   { key: 'economia', label: 'Economía' },
 ]
 
-// Placeholder hasta que llegue el dataset real por departamento
-const PLACEHOLDER_INFO = {
-  transporte: 'Sistema de transporte con rutas intermunicipales y terminal principal.',
-  turismo: 'Destinos turísticos destacados y atractivos naturales de la región.',
-  educacion: 'Instituciones educativas y oferta académica disponible.',
-  economia: 'Actividades económicas y emprendimientos locales predominantes.',
+// Campo con la lista a mostrar debajo de la descripción, por tab
+const LIST_FIELD = {
+  transporte: 'routes',
+  turismo: 'topDestinations',
+  educacion: 'universities',
+  economia: 'mainActivities',
 }
 
 export default function SidePanel({ department, onClose }) {
@@ -23,6 +24,8 @@ export default function SidePanel({ department, onClose }) {
   }, [department])
 
   const isOpen = Boolean(department)
+  const info = department ? DEPARTMENTS[department]?.[activeTab] : null
+  const listField = LIST_FIELD[activeTab]
 
   return (
     <div style={{
@@ -96,7 +99,25 @@ export default function SidePanel({ department, onClose }) {
       </div>
 
       <div style={{ padding: '24px', overflowY: 'auto', fontSize: '14px', lineHeight: 1.6 }}>
-        {PLACEHOLDER_INFO[activeTab]}
+        {info ? (
+          <>
+            <p style={{ margin: '0 0 16px', color: 'rgba(255,255,255,0.9)' }}>{info.description}</p>
+            {info.mainTerminal && (
+              <p style={{ margin: '0 0 16px', color: '#ffd700', fontSize: '13px' }}>
+                Terminal principal: {info.mainTerminal}
+              </p>
+            )}
+            {info[listField] && (
+              <ul style={{ margin: 0, paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
+                {info[listField].map(item => (
+                  <li key={item} style={{ marginBottom: '8px' }}>{item}</li>
+                ))}
+              </ul>
+            )}
+          </>
+        ) : (
+          <p style={{ color: 'rgba(255,255,255,0.4)' }}>Sin información disponible.</p>
+        )}
       </div>
     </div>
   )
