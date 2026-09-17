@@ -48,7 +48,7 @@ export const TOURISM_STATS = {
         "count": 3980
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 3292
       }
     ]
@@ -98,7 +98,7 @@ export const TOURISM_STATS = {
         "count": 697
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 641
       }
     ]
@@ -148,7 +148,7 @@ export const TOURISM_STATS = {
         "count": 3264
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 2072
       }
     ]
@@ -173,7 +173,7 @@ export const TOURISM_STATS = {
         "count": 1327
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 593
       }
     ]
@@ -198,7 +198,7 @@ export const TOURISM_STATS = {
         "count": 1502
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 314
       }
     ]
@@ -319,7 +319,7 @@ export const TOURISM_STATS = {
         "count": 687
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 43
       },
       {
@@ -348,7 +348,7 @@ export const TOURISM_STATS = {
         "count": 212
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 162
       }
     ]
@@ -369,7 +369,7 @@ export const TOURISM_STATS = {
         "count": 5631
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 2121
       },
       {
@@ -448,7 +448,7 @@ export const TOURISM_STATS = {
         "count": 181
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 25
       }
     ]
@@ -498,7 +498,7 @@ export const TOURISM_STATS = {
         "count": 2804
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 1426
       }
     ]
@@ -548,7 +548,7 @@ export const TOURISM_STATS = {
         "count": 427
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 129
       }
     ]
@@ -623,7 +623,7 @@ export const TOURISM_STATS = {
         "count": 631
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 554
       }
     ]
@@ -648,7 +648,7 @@ export const TOURISM_STATS = {
         "count": 644
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 477
       }
     ]
@@ -673,7 +673,7 @@ export const TOURISM_STATS = {
         "count": 686
       },
       {
-        "categoria": "Arrendadores de Vehículos Para Turismo Nacional e Internacional",
+        "categoria": "Arrendadores de Vehículos Para Turismo Nacional E Internacional",
         "count": 522
       }
     ]
@@ -698,7 +698,7 @@ export const TOURISM_STATS = {
         "count": 1573
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 535
       }
     ]
@@ -748,7 +748,7 @@ export const TOURISM_STATS = {
         "count": 998
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 683
       }
     ]
@@ -773,7 +773,7 @@ export const TOURISM_STATS = {
         "count": 1215
       },
       {
-        "categoria": "Otros Tipos de Hospedaje Turísticos no Permanentes",
+        "categoria": "Otros Tipos de Hospedaje Turísticos No Permanentes",
         "count": 911
       }
     ]

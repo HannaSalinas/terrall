@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react'
 import { DEPARTMENTS } from '../data/departments'
 import { TOURISM_STATS } from '../data/tourismStats'
+import { TOURISM_VENUES } from '../data/tourismVenues'
+
+function mapsSearchUrl(query) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+}
+
+const linkStyle = {
+  color: 'inherit',
+  textDecoration: 'none',
+  borderBottom: '1px dotted rgba(255,215,0,0.5)',
+}
 
 const TABS = [
   { key: 'transporte', label: 'Transporte' },
@@ -28,6 +39,7 @@ export default function SidePanel({ department, onClose }) {
   const info = department ? DEPARTMENTS[department]?.[activeTab] : null
   const listField = LIST_FIELD[activeTab]
   const tourismStats = department ? TOURISM_STATS[department] : null
+  const tourismVenues = department ? TOURISM_VENUES[department] : null
 
   return (
     <div style={{
@@ -106,7 +118,15 @@ export default function SidePanel({ department, onClose }) {
             <p style={{ margin: '0 0 16px', color: 'rgba(255,255,255,0.9)' }}>{info.description}</p>
             {info.mainTerminal && (
               <p style={{ margin: '0 0 16px', color: '#ffd700', fontSize: '13px' }}>
-                Terminal principal: {info.mainTerminal}
+                Terminal principal:{' '}
+                <a
+                  href={mapsSearchUrl(`${info.mainTerminal}, Colombia`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={linkStyle}
+                >
+                  {info.mainTerminal} ↗
+                </a>
               </p>
             )}
 
@@ -116,14 +136,40 @@ export default function SidePanel({ department, onClose }) {
                   <strong style={{ color: '#ffd700' }}>{tourismStats.total.toLocaleString('es-CO')}</strong>{' '}
                   establecimientos turísticos activos registrados
                 </p>
-                <ul style={{ margin: 0, paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
+                <ul style={{ margin: '0 0 20px', paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
                   {tourismStats.topCategories.map(cat => (
                     <li key={cat.categoria} style={{ marginBottom: '8px' }}>
                       {cat.categoria} — {cat.count.toLocaleString('es-CO')}
                     </li>
                   ))}
                 </ul>
-                <p style={{ marginTop: '20px', fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>
+
+                {tourismVenues && tourismVenues.length > 0 && (
+                  <>
+                    <p style={{ margin: '0 0 10px', fontSize: '13px', color: 'rgba(255,255,255,0.9)' }}>
+                      Establecimientos destacados
+                    </p>
+                    <ul style={{ margin: '0 0 16px', paddingLeft: '18px', color: 'rgba(255,255,255,0.75)' }}>
+                      {tourismVenues.map(venue => (
+                        <li key={venue.name + venue.municipio} style={{ marginBottom: '10px' }}>
+                          <a
+                            href={mapsSearchUrl(`${venue.name}, ${venue.municipio}, Colombia`)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={linkStyle}
+                          >
+                            {venue.name} ↗
+                          </a>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>
+                            {venue.municipio} · {venue.categoria}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>
                   Fuente: Registro Nacional de Turismo (RNT), datos.gov.co
                 </p>
               </>
