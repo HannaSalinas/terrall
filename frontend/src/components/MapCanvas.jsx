@@ -8,6 +8,7 @@ export default function MapCanvas() {
   const [hoveredDept, setHoveredDept] = useState(null)
   const [hoveredCity, setHoveredCity] = useState(null)
   const [mapOffset, setMapOffset] = useState(null)
+  const [selectedDept, setSelectedDept] = useState(null)
 
   const label = hoveredCity ? hoveredCity.name : hoveredDept
 
@@ -40,7 +41,12 @@ export default function MapCanvas() {
         <ambientLight intensity={0.5} />
         <directionalLight position={[8, 12, 8]} intensity={1.5} />
         <directionalLight position={[-8, -4, -4]} intensity={0.2} color='#4488ff' />
-        <ColombiaMap onHover={setHoveredDept} onOffsetReady={setMapOffset} />
+        <ColombiaMap
+          onHover={setHoveredDept}
+          onOffsetReady={setMapOffset}
+          onSelect={setSelectedDept}
+          selectedDept={selectedDept}
+        />
         <CitiesLayer onCityHover={setHoveredCity} offset={mapOffset} />
         <OrbitControls />
       </Canvas>

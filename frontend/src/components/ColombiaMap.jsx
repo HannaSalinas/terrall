@@ -15,6 +15,12 @@ const PALETTE = [
   '#023e8a',
 ]
 
+const EDGE_COLOR = '#000000'
+const EDGE_COLOR_SELECTED = '#ffd700'
+const EMISSIVE_HOVER = '#333333'
+const EMISSIVE_SELECTED = '#664400'
+const EMISSIVE_NONE = '#000000'
+
 export const projection = geoMercator()
   .center([-74.3, 4.5])
   .scale(1200)
@@ -23,11 +29,17 @@ export const projection = geoMercator()
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 
-export default function ColombiaMap({ onHover, onOffsetReady }) {
+export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selectedDept }) {
   const { scene, camera, gl } = useThree()
   const groupRef = useRef()
   const meshesRef = useRef([])
   const hoveredMeshRef = useRef(null)
+  const selectedDeptRef = useRef(selectedDept)
+
+  useEffect(() => {
+    selectedDeptRef.current = selectedDept
+    meshesRef.current.forEach(mesh => applyMeshStyle(mesh, hoveredMeshRef.current, selectedDept))
+  }, [selectedDept])
 
   useEffect(() => {
     fetch('/geo/colombia.geojson')
@@ -57,9 +69,12 @@ export default function ColombiaMap({ onHover, onOffsetReady }) {
 
             const edgeGeo = new THREE.EdgesGeometry(geometry, 15)
             const edgeMat = new THREE.LineBasicMaterial({
-              color: '#000000', transparent: true, opacity: 0.4,
+              color: EDGE_COLOR, transparent: true, opacity: 0.4,
             })
+            mesh.userData.edgeMaterial = edgeMat
             mesh.add(new THREE.LineSegments(edgeGeo, edgeMat))
+
+            applyMeshStyle(mesh, null, selectedDeptRef.current)
           })
         })
 
@@ -83,30 +98,45 @@ export default function ColombiaMap({ onHover, onOffsetReady }) {
 
   useEffect(() => {
     const canvas = gl.domElement
-    const onMouseMove = (e) => {
+
+    const getHit = (e) => {
       const rect = canvas.getBoundingClientRect()
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(mouse, camera)
-      const hits = raycaster.intersectObjects(meshesRef.current)
-      if (hoveredMeshRef.current) {
-        hoveredMeshRef.current.userData.targetZ = 0
-        hoveredMeshRef.current.material.emissive.setHex(0x000000)
+      const hits = raycaster.intersectObjects(meshesRef.current, false)
+      return hits.length > 0 ? hits[0].object : null
+    }
+
+    const onMouseMove = (e) => {
+      const mesh = getHit(e)
+      if (hoveredMeshRef.current && hoveredMeshRef.current !== mesh) {
+        applyMeshStyle(hoveredMeshRef.current, null, selectedDeptRef.current)
       }
-      if (hits.length > 0) {
-        const mesh = hits[0].object
-        mesh.userData.targetZ = 1.2
-        mesh.material.emissive.set('#333333')
+      if (mesh) {
         hoveredMeshRef.current = mesh
+        applyMeshStyle(mesh, mesh, selectedDeptRef.current)
         if (onHover) onHover(mesh.userData.name)
       } else {
         hoveredMeshRef.current = null
         if (onHover) onHover(null)
       }
     }
+
+    const onClick = (e) => {
+      const mesh = getHit(e)
+      if (!mesh) return
+      const name = mesh.userData.name
+      if (onSelect) onSelect(name === selectedDeptRef.current ? null : name)
+    }
+
     canvas.addEventListener('mousemove', onMouseMove)
-    return () => canvas.removeEventListener('mousemove', onMouseMove)
-  }, [camera, gl, onHover])
+    canvas.addEventListener('click', onClick)
+    return () => {
+      canvas.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('click', onClick)
+    }
+  }, [camera, gl, onHover, onSelect])
 
   useFrame(() => {
     meshesRef.current.forEach(mesh => {
@@ -116,6 +146,23 @@ export default function ColombiaMap({ onHover, onOffsetReady }) {
   })
 
   return null
+}
+
+function applyMeshStyle(mesh, hoveredMesh, selectedDept) {
+  const isSelected = mesh.userData.name === selectedDept
+  const isHovered = mesh === hoveredMesh
+
+  mesh.userData.targetZ = isHovered ? 1.2 : 0
+  mesh.userData.edgeMaterial.color.set(isSelected ? EDGE_COLOR_SELECTED : EDGE_COLOR)
+  mesh.userData.edgeMaterial.opacity = isSelected ? 0.9 : 0.4
+
+  if (isSelected) {
+    mesh.material.emissive.set(EMISSIVE_SELECTED)
+  } else if (isHovered) {
+    mesh.material.emissive.set(EMISSIVE_HOVER)
+  } else {
+    mesh.material.emissive.set(EMISSIVE_NONE)
+  }
 }
 
 function geoFeatureToShapes(feature, projection) {
