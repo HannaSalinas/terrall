@@ -91,7 +91,13 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
       })
 
     return () => {
-      if (groupRef.current) scene.remove(groupRef.current)
+      if (groupRef.current) {
+        scene.remove(groupRef.current)
+        groupRef.current.traverse(obj => {
+          obj.geometry?.dispose()
+          obj.material?.dispose()
+        })
+      }
       meshesRef.current = []
     }
   }, [scene, onOffsetReady])
