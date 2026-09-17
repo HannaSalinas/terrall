@@ -1,21 +1,27 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import ColombiaMap from './ColombiaMap'
+import CitiesLayer from './CitiesLayer'
 
 export default function MapCanvas() {
   const [hoveredDept, setHoveredDept] = useState(null)
+  const [hoveredCity, setHoveredCity] = useState(null)
+  const [mapOffset, setMapOffset] = useState(null)
+
+  const label = hoveredCity ? hoveredCity.name : hoveredDept
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      {hoveredDept && (
+      {label && (
         <div style={{
           position: 'absolute',
           top: '24px',
           left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(0,0,0,0.7)',
-          color: '#ffffff',
+          background: hoveredCity ? 'rgba(255,200,0,0.15)' : 'rgba(0,0,0,0.7)',
+          border: hoveredCity ? '1px solid rgba(255,200,0,0.6)' : 'none',
+          color: hoveredCity ? '#ffdd00' : '#ffffff',
           padding: '8px 20px',
           borderRadius: '20px',
           fontSize: '14px',
@@ -24,14 +30,18 @@ export default function MapCanvas() {
           pointerEvents: 'none',
           zIndex: 10,
         }}>
-          {hoveredDept}
+          {hoveredCity
+            ? hoveredCity.name + ' · ' + (hoveredCity.population / 1000000).toFixed(1) + 'M hab'
+            : label
+          }
         </div>
       )}
       <Canvas camera={{ position: [0, 0, 12], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[8, 12, 8]} intensity={1.5} />
         <directionalLight position={[-8, -4, -4]} intensity={0.2} color='#4488ff' />
-        <ColombiaMap onHover={setHoveredDept} />
+        <ColombiaMap onHover={setHoveredDept} onOffsetReady={setMapOffset} />
+        <CitiesLayer onCityHover={setHoveredCity} offset={mapOffset} />
         <OrbitControls />
       </Canvas>
     </div>
