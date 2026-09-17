@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import ColombiaMap from './ColombiaMap'
 import CitiesLayer from './CitiesLayer'
+import SidePanel from './SidePanel'
 
 export default function MapCanvas() {
   const [hoveredDept, setHoveredDept] = useState(null)
@@ -50,6 +51,7 @@ export default function MapCanvas() {
         <CitiesLayer onCityHover={setHoveredCity} offset={mapOffset} />
         <OrbitControls />
       </Canvas>
+      <SidePanel department={selectedDept} onClose={() => setSelectedDept(null)} />
     </div>
   )
 }
