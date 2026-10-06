@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { geoMercator } from 'd3-geo'
+import { projection } from '../utils/projection'
 
 const PALETTE = [
   '#2d6a4f', '#40916c', '#52b788', '#74c69d',
@@ -20,11 +20,6 @@ const EDGE_COLOR_SELECTED = '#ffd700'
 const EMISSIVE_HOVER = '#333333'
 const EMISSIVE_SELECTED = '#664400'
 const EMISSIVE_NONE = '#000000'
-
-export const projection = geoMercator()
-  .center([-74.3, 4.5])
-  .scale(1200)
-  .translate([0, 0])
 
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()

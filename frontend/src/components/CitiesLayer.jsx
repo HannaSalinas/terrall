@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { projection } from './ColombiaMap'
+import { projection } from '../utils/projection'
 import { CITIES } from '../data/cities'
 
 const raycaster = new THREE.Raycaster()
