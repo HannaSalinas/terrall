@@ -1,8 +1,19 @@
-# React + Vite
+# Terrall · frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación React + Vite con el mapa 3D de Colombia. La documentación completa del proyecto está en el [README principal](../README.md).
 
-Currently, two official plugins are available:
+```bash
+npm ci
+npm run dev       # servidor de desarrollo en http://localhost:5173
+npm run lint      # ESLint
+npm run build     # build de producción en dist/
+npm run preview   # sirve el build localmente
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Scripts de datos
+
+| Script | Qué hace |
+|---|---|
+| `scripts/fetch-tourism-data.mjs` | Descarga del RNT (datos.gov.co) el total de establecimientos por departamento y categoría y genera `src/data/tourismStats.js` |
+| `scripts/fetch-tourism-venues.mjs` | Descarga una muestra de establecimientos con nombre comercial y genera `src/data/tourismVenues.js` |
+| `scripts/simplify-geojson.mjs [epsilon]` | Simplifica `public/geo/colombia.geojson` con Ramer-Douglas-Peucker (por defecto ε = 0,004°) |
