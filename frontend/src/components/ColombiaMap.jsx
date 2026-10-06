@@ -37,7 +37,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
   }, [selectedDept])
 
   useEffect(() => {
-    fetch('/geo/colombia.geojson')
+    fetch(`${import.meta.env.BASE_URL}geo/colombia.geojson`)
       .then(r => r.json())
       .then(data => {
         const group = new THREE.Group()
