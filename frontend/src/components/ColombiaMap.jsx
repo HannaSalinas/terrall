@@ -22,7 +22,9 @@ const EMISSIVE_SELECTED = '#664400'
 const EMISSIVE_NONE = '#000000'
 
 const EXTRUDE_DEPTH = 0.25
-const HOVER_LIFT = 0.3
+// El grupo está rotado 180° en X, así que una z local negativa acerca el
+// departamento a la cámara.
+const HOVER_LIFT = -0.3
 // Margen alrededor del país al encuadrar la cámara
 const CAMERA_MARGIN = 1.1
 
