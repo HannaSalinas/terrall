@@ -1,0 +1,13 @@
+# Variables de entorno (credenciales y configuración local)
+.env
+.env.*
+!.env.example
+
+# Dependencias y artefactos de build
+node_modules/
+dist/
+
+# Sistema operativo y editores
+.DS_Store
+.idea/
+.vscode/
