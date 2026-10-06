@@ -4,6 +4,9 @@ import * as THREE from 'three'
 import { projection } from '../utils/projection'
 import { CITIES } from '../data/cities'
 
+// Altura de los marcadores sobre el mapa (por encima de un departamento elevado)
+const MARKER_Z = 0.45
+
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 
@@ -32,7 +35,7 @@ export default function CitiesLayer({ onCityHover, offset }) {
       const x = px + offset.x
       const y = -(py) + offset.y
 
-      const geo = new THREE.SphereGeometry(0.1, 16, 16)
+      const geo = new THREE.SphereGeometry(0.06, 16, 16)
       const mat = new THREE.MeshStandardMaterial({
         color: '#ffffff',
         emissive: '#ffdd00',
@@ -41,12 +44,12 @@ export default function CitiesLayer({ onCityHover, offset }) {
         metalness: 0.4,
       })
       const marker = new THREE.Mesh(geo, mat)
-      marker.position.set(x, y, 1.0)
+      marker.position.set(x, y, MARKER_Z)
       marker.userData = { city }
       group.add(marker)
       markersRef.current.push(marker)
 
-      const ringGeo = new THREE.RingGeometry(0.14, 0.19, 32)
+      const ringGeo = new THREE.RingGeometry(0.08, 0.11, 32)
       const ringMat = new THREE.MeshBasicMaterial({
         color: '#ffdd00',
         transparent: true,
@@ -54,7 +57,7 @@ export default function CitiesLayer({ onCityHover, offset }) {
         side: THREE.DoubleSide,
       })
       const ring = new THREE.Mesh(ringGeo, ringMat)
-      ring.position.set(x, y, 0.95)
+      ring.position.set(x, y, MARKER_Z - 0.05)
       group.add(ring)
     })
 

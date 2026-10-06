@@ -21,6 +21,11 @@ const EMISSIVE_HOVER = '#333333'
 const EMISSIVE_SELECTED = '#664400'
 const EMISSIVE_NONE = '#000000'
 
+const EXTRUDE_DEPTH = 0.25
+const HOVER_LIFT = 0.3
+// Margen alrededor del país al encuadrar la cámara
+const CAMERA_MARGIN = 1.1
+
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 
@@ -48,7 +53,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
 
           shapes.forEach(shape => {
             const geometry = new THREE.ExtrudeGeometry(shape, {
-              depth: 0.5,
+              depth: EXTRUDE_DEPTH,
               bevelEnabled: false,
             })
             const color = new THREE.Color(PALETTE[i % PALETTE.length])
@@ -80,6 +85,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
 
         scene.add(group)
         groupRef.current = group
+        fitCameraToBox(camera, box)
 
         // Pasar el offset calculado a CitiesLayer
         if (onOffsetReady) onOffsetReady({ x: -center.x, y: -center.y })
@@ -95,7 +101,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
       }
       meshesRef.current = []
     }
-  }, [scene, onOffsetReady])
+  }, [scene, camera, onOffsetReady])
 
   useEffect(() => {
     const canvas = gl.domElement
@@ -153,7 +159,7 @@ function applyMeshStyle(mesh, hoveredMesh, selectedDept) {
   const isSelected = mesh.userData.name === selectedDept
   const isHovered = mesh === hoveredMesh
 
-  mesh.userData.targetZ = isHovered ? 1.2 : 0
+  mesh.userData.targetZ = isHovered ? HOVER_LIFT : 0
   mesh.userData.edgeMaterial.color.set(isSelected ? EDGE_COLOR_SELECTED : EDGE_COLOR)
   mesh.userData.edgeMaterial.opacity = isSelected ? 0.9 : 0.4
 
@@ -180,4 +186,15 @@ function geoFeatureToShapes(feature, projection) {
     })
   })
   return shapes
+}
+
+// Aleja la cámara lo justo para que todo el país quepa en pantalla,
+// según el campo de visión y la proporción del viewport.
+function fitCameraToBox(camera, box) {
+  const size = box.getSize(new THREE.Vector3())
+  const halfFov = THREE.MathUtils.degToRad(camera.fov) / 2
+  const distForHeight = size.y / 2 / Math.tan(halfFov)
+  const distForWidth = size.x / 2 / (Math.tan(halfFov) * camera.aspect)
+  camera.position.set(0, 0, Math.max(distForHeight, distForWidth) * CAMERA_MARGIN)
+  camera.updateProjectionMatrix()
 }
