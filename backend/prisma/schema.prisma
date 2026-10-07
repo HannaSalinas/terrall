@@ -1,0 +1,92 @@
+// Esquema de la base de datos de Terrall
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Topic {
+  TRANSPORTE
+  TURISMO
+  EDUCACION
+  ECONOMIA
+}
+
+/// Departamento de Colombia, identificado por su código DANE (por ejemplo "05")
+model Department {
+  code          String            @id @db.Char(2)
+  name          String            @unique
+  topics        DepartmentTopic[]
+  tourismStat   TourismStat?
+  tourismVenues TourismVenue[]
+
+  @@map("departments")
+}
+
+/// Información por tema de un departamento
+model DepartmentTopic {
+  id             Int        @id @default(autoincrement())
+  departmentCode String     @map("department_code") @db.Char(2)
+  topic          Topic
+  description    String
+  items          String[]
+  mainTerminal   String?    @map("main_terminal")
+  /// true cuando el texto es de ejemplo y no proviene de una fuente oficial
+  isSample       Boolean    @default(true) @map("is_sample")
+  department     Department @relation(fields: [departmentCode], references: [code], onDelete: Cascade)
+
+  @@unique([departmentCode, topic])
+  @@map("department_topics")
+}
+
+/// Totales del Registro Nacional de Turismo (RNT) por departamento
+model TourismStat {
+  departmentCode String            @id @map("department_code") @db.Char(2)
+  total          Int
+  source         String
+  updatedOn      DateTime          @map("updated_on") @db.Date
+  categories     TourismCategory[]
+  department     Department        @relation(fields: [departmentCode], references: [code], onDelete: Cascade)
+
+  @@map("tourism_stats")
+}
+
+/// Categorías con más establecimientos en un departamento
+model TourismCategory {
+  id             Int         @id @default(autoincrement())
+  departmentCode String      @map("department_code") @db.Char(2)
+  category       String
+  count          Int
+  rank           Int
+  stat           TourismStat @relation(fields: [departmentCode], references: [departmentCode], onDelete: Cascade)
+
+  @@unique([departmentCode, rank])
+  @@map("tourism_categories")
+}
+
+/// Establecimientos turísticos con nombre comercial (muestra del RNT)
+model TourismVenue {
+  id             Int        @id @default(autoincrement())
+  departmentCode String     @map("department_code") @db.Char(2)
+  name           String
+  municipality   String
+  category       String
+  department     Department @relation(fields: [departmentCode], references: [code], onDelete: Cascade)
+
+  @@index([departmentCode])
+  @@map("tourism_venues")
+}
+
+/// Ciudades principales que se muestran en el mapa
+model City {
+  id         Int    @id @default(autoincrement())
+  name       String @unique
+  lat        Float
+  lng        Float
+  population Int
+
+  @@map("cities")
+}

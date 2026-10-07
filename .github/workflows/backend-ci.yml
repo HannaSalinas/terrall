@@ -1,0 +1,50 @@
+name: Backend CI
+
+on:
+  push:
+    paths: ['backend/**', 'frontend/src/data/**', 'frontend/public/geo/**', '.github/workflows/backend-ci.yml']
+  pull_request:
+    paths: ['backend/**', 'frontend/src/data/**', 'frontend/public/geo/**', '.github/workflows/backend-ci.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: terrall
+          POSTGRES_PASSWORD: terrall
+          POSTGRES_DB: terrall
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U terrall -d terrall"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://terrall:terrall@localhost:5432/terrall?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - name: Lint
+        run: npx eslint "{src,test}/**/*.ts" --max-warnings=0
+      - run: npm run build
+      - name: Pruebas unitarias
+        run: npm test
+      - name: Migraciones y seed
+        run: npm run db:migrate && npm run db:seed
+      - name: Pruebas end-to-end
+        run: npm run test:e2e

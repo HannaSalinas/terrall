@@ -10,6 +10,10 @@ npm run build     # build de producción en dist/
 npm run preview   # sirve el build localmente
 ```
 
+## Conexión con la API
+
+Copia `.env.example` a `.env` para que el panel pida los datos a la API del [backend](../backend/README.md) (`VITE_API_URL`). Sin esa variable, o si la API no responde, se usan los datos de `src/data/`.
+
 ## Scripts de datos
 
 | Script | Qué hace |

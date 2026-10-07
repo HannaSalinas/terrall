@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { DEPARTMENTS } from '../data/departments'
-import { TOURISM_STATS } from '../data/tourismStats'
-import { TOURISM_VENUES } from '../data/tourismVenues'
+import { useDepartmentData } from '../hooks/useDepartmentData'
 
 function mapsSearchUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
@@ -36,10 +34,11 @@ export default function SidePanel({ department, onClose }) {
   }, [department])
 
   const isOpen = Boolean(department)
-  const info = department ? DEPARTMENTS[department]?.[activeTab] : null
+  const data = useDepartmentData(department)
+  const info = data?.info?.[activeTab] ?? null
   const listField = LIST_FIELD[activeTab]
-  const tourismStats = department ? TOURISM_STATS[department] : null
-  const tourismVenues = department ? TOURISM_VENUES[department] : null
+  const tourismStats = data?.tourismStats ?? null
+  const tourismVenues = data?.tourismVenues ?? null
 
   return (
     <div style={{
