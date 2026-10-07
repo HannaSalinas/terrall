@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: terrall
+      POSTGRES_PASSWORD: terrall
+      POSTGRES_DB: terrall
+    ports:
+      - "5432:5432"
+    volumes:
+      - terrall-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U terrall -d terrall"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  terrall-db:
