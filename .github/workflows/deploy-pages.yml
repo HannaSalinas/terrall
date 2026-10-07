@@ -30,6 +30,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+        env:
+          # URL pública de la API (variable del repositorio). Si está vacía, la demo usa los datos estáticos.
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: frontend/dist
