@@ -19,11 +19,11 @@ WORKDIR /app
 COPY frontend/src/data ./frontend/src/data
 COPY frontend/public/geo ./frontend/public/geo
 WORKDIR /app/backend
-# node_modules completo: el contenedor aplica migraciones y seed al iniciar (Prisma CLI y tsx)
+# node_modules completo: el contenedor aplica migraciones y, si la base está vacía, el seed al iniciar (Prisma CLI y tsx)
 COPY --from=build /app/backend/node_modules ./node_modules
 COPY --from=build /app/backend/dist ./dist
 COPY --from=build /app/backend/prisma ./prisma
 COPY --from=build /app/backend/package.json ./
 USER node
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed -- --if-empty && node dist/main"]
