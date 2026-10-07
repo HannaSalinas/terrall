@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl \
 WORKDIR /app/backend
 COPY backend/package.json backend/package-lock.json ./
 COPY backend/prisma ./prisma
-RUN npm ci
+RUN npm ci --no-audit --no-fund --fetch-timeout=60000 --fetch-retries=5
 COPY backend/ ./
 RUN npm run build
 
