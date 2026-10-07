@@ -29,6 +29,11 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
+      // React Three Fiber usa props de Three.js (intensity, position...) que
+      // la regla no reconoce como atributos válidos.
+      'react/no-unknown-property': 'off',
+      // El proyecto no usa PropTypes.
+      'react/prop-types': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { geoMercator } from 'd3-geo'
+import { projection } from '../utils/projection'
 
 const PALETTE = [
   '#2d6a4f', '#40916c', '#52b788', '#74c69d',
@@ -21,10 +21,12 @@ const EMISSIVE_HOVER = '#333333'
 const EMISSIVE_SELECTED = '#664400'
 const EMISSIVE_NONE = '#000000'
 
-export const projection = geoMercator()
-  .center([-74.3, 4.5])
-  .scale(1200)
-  .translate([0, 0])
+const EXTRUDE_DEPTH = 0.25
+// El grupo está rotado 180° en X, así que una z local negativa acerca el
+// departamento a la cámara.
+const HOVER_LIFT = -0.3
+// Margen alrededor del país al encuadrar la cámara
+const CAMERA_MARGIN = 1.1
 
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
@@ -42,7 +44,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
   }, [selectedDept])
 
   useEffect(() => {
-    fetch('/geo/colombia.geojson')
+    fetch(`${import.meta.env.BASE_URL}geo/colombia.geojson`)
       .then(r => r.json())
       .then(data => {
         const group = new THREE.Group()
@@ -53,7 +55,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
 
           shapes.forEach(shape => {
             const geometry = new THREE.ExtrudeGeometry(shape, {
-              depth: 0.5,
+              depth: EXTRUDE_DEPTH,
               bevelEnabled: false,
             })
             const color = new THREE.Color(PALETTE[i % PALETTE.length])
@@ -85,6 +87,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
 
         scene.add(group)
         groupRef.current = group
+        fitCameraToBox(camera, box)
 
         // Pasar el offset calculado a CitiesLayer
         if (onOffsetReady) onOffsetReady({ x: -center.x, y: -center.y })
@@ -100,7 +103,7 @@ export default function ColombiaMap({ onHover, onOffsetReady, onSelect, selected
       }
       meshesRef.current = []
     }
-  }, [scene, onOffsetReady])
+  }, [scene, camera, onOffsetReady])
 
   useEffect(() => {
     const canvas = gl.domElement
@@ -158,7 +161,7 @@ function applyMeshStyle(mesh, hoveredMesh, selectedDept) {
   const isSelected = mesh.userData.name === selectedDept
   const isHovered = mesh === hoveredMesh
 
-  mesh.userData.targetZ = isHovered ? 1.2 : 0
+  mesh.userData.targetZ = isHovered ? HOVER_LIFT : 0
   mesh.userData.edgeMaterial.color.set(isSelected ? EDGE_COLOR_SELECTED : EDGE_COLOR)
   mesh.userData.edgeMaterial.opacity = isSelected ? 0.9 : 0.4
 
@@ -185,4 +188,15 @@ function geoFeatureToShapes(feature, projection) {
     })
   })
   return shapes
+}
+
+// Aleja la cámara lo justo para que todo el país quepa en pantalla,
+// según el campo de visión y la proporción del viewport.
+function fitCameraToBox(camera, box) {
+  const size = box.getSize(new THREE.Vector3())
+  const halfFov = THREE.MathUtils.degToRad(camera.fov) / 2
+  const distForHeight = size.y / 2 / Math.tan(halfFov)
+  const distForWidth = size.x / 2 / (Math.tan(halfFov) * camera.aspect)
+  camera.position.set(0, 0, Math.max(distForHeight, distForWidth) * CAMERA_MARGIN)
+  camera.updateProjectionMatrix()
 }
