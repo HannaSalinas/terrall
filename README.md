@@ -2,7 +2,7 @@
 
 Mapa 3D interactivo de Colombia para explorar, departamento por departamento, información de transporte, turismo, educación y economía desde un solo lugar.
 
-**[Ver demo](https://hannasalinas.github.io/terrall/)** · Estado: 🚧 en desarrollo · Frontend + API REST ([`backend/`](backend/))
+**[Ver demo](https://hannasalinas.github.io/terrall/)** · **[API](https://terrall-api.onrender.com/api/docs)** · Estado: 🚧 en desarrollo
 
 ![Mapa 3D de Colombia con los 33 departamentos extruidos y las principales ciudades marcadas](docs/capturas/mapa.png)
 
@@ -20,7 +20,7 @@ La información territorial de Colombia está repartida en muchas fuentes (porta
 | Capa de ciudades principales (12 ciudades con población) | ✅ Funciona |
 | Turismo | ✅ Datos reales del Registro Nacional de Turismo (datos.gov.co) |
 | Transporte, Educación, Economía | 🟡 Interfaz lista, con **datos de ejemplo** |
-| API REST de solo lectura (NestJS + PostgreSQL), con pruebas y CI | ✅ Funciona en local y con Docker; aún no está desplegada |
+| API REST de solo lectura (NestJS + PostgreSQL), con pruebas y CI | ✅ Desplegada en Render con PostgreSQL en Neon; la demo la usa |
 | Autenticación de usuarios | ⏳ Planeado (ver [Roadmap](#roadmap)) |
 
 ## Stack
@@ -100,6 +100,7 @@ node scripts/fetch-tourism-venues.mjs   # muestra de establecimientos con nombre
 - **GeoJSON simplificado.** Construir la geometría con los 34.191 puntos originales bloqueaba el hilo principal ~1,75 s. Con una simplificación Ramer-Douglas-Peucker (`scripts/simplify-geojson.mjs`) bajó a 8.006 puntos (−76,6 %), el archivo pasó de 1,5 MB a 318 KB y la construcción, a ~0,55 s.
 - **Datos estáticos generados por scripts.** Los scripts descargan y resumen los datos de datos.gov.co y el frontend los importa. La demo carga rápido y no depende de la disponibilidad de datos.gov.co.
 - **API opcional con respaldo.** El frontend usa la API cuando está configurada y, si falla, vuelve a los datos estáticos. La API carga esos mismos datos en PostgreSQL con un seed y marca los textos de ejemplo con `isSample`.
+- **Despliegue gratuito.** La API corre en Render (plan gratuito, se suspende tras 15 minutos sin uso y tarda cerca de un minuto en despertar) y la base en Neon. Mientras la API despierta, la demo muestra los datos estáticos, así que nunca queda vacía.
 - **Cámara ajustada al país.** Al cargar el mapa, la cámara calcula la distancia necesaria según el campo de visión y la proporción de la pantalla, así el país se ve completo en escritorio y en móvil.
 - **Liberación de recursos de GPU.** Geometrías y materiales se liberan (`dispose`) al desmontar, siguiendo el ciclo de vida de objetos de Three.js.
 - **Build pensado para cualquier hosting.** Rutas relativas (`base: './'`) y Three.js en un chunk aparte, para que la demo funcione en GitHub Pages o Vercel sin cambiar la configuración.
@@ -108,7 +109,7 @@ node scripts/fetch-tourism-venues.mjs   # muestra de establecimientos con nombre
 
 - [ ] Reemplazar los datos de ejemplo de transporte, educación y economía por fuentes abiertas reales
 - [x] API REST de solo lectura con **NestJS + PostgreSQL**, pruebas y CI
-- [ ] Desplegar la API en un servidor público y conectarla a la demo
+- [x] Desplegar la API (Render + Neon) y conectarla a la demo
 - [ ] Autenticación de usuarios y favoritos
 - [ ] Pruebas automatizadas del frontend
 
