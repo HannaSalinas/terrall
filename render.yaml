@@ -1,0 +1,23 @@
+# Configuración de Render (Blueprint) para la API de Terrall.
+# DATABASE_URL se ingresa en Render al aplicar el Blueprint; nunca se guarda en el repositorio.
+services:
+  - type: web
+    name: terrall-api
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: develop
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./
+    healthCheckPath: /api/health
+    autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - backend/**
+        - frontend/src/data/**
+        - frontend/public/geo/**
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://hannasalinas.github.io

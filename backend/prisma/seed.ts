@@ -1,6 +1,8 @@
 // Carga en PostgreSQL los datos que hoy usa el frontend (frontend/src/data y
 // el GeoJSON). Es idempotente: borra y vuelve a insertar todo en una transacción.
 // Uso: npx prisma db seed
+//      npx prisma db seed -- --if-empty   (no hace nada si ya hay datos; lo usa
+//                                          el contenedor al iniciar)
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PrismaClient, Topic } from '@prisma/client';
@@ -54,6 +56,16 @@ function readTourismUpdatedOn(): Date {
 
 async function main() {
   const prisma = new PrismaClient();
+
+  if (
+    process.argv.includes('--if-empty') &&
+    (await prisma.department.count()) > 0
+  ) {
+    console.log('La base ya tiene datos; se omite el seed.');
+    await prisma.$disconnect();
+    return;
+  }
+
   const codes = readDepartmentCodes();
   const updatedOn = readTourismUpdatedOn();
 
