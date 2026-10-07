@@ -17,7 +17,7 @@ La información territorial de Colombia está repartida en muchas fuentes (porta
 | Módulo | Estado |
 |---|---|
 | Mapa 3D de Colombia (33 departamentos, hover, selección, órbita libre) | ✅ Funciona |
-| Capa de ciudades principales (24 ciudades con población) | ✅ Funciona |
+| Capa de ciudades principales (12 ciudades con población) | ✅ Funciona |
 | Turismo | ✅ Datos reales del Registro Nacional de Turismo (datos.gov.co) |
 | Transporte, Educación, Economía | 🟡 Interfaz lista, con **datos de ejemplo** |
 | Backend y autenticación de usuarios | ⏳ Planeado (ver [Roadmap](#roadmap)) |
