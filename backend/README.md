@@ -4,6 +4,8 @@ API REST de Terrall: sirve por departamento la información que muestra el mapa 
 
 **Stack:** NestJS 11 · TypeScript · PostgreSQL 16 · Prisma · Swagger · Jest
 
+**En producción:** https://terrall-api.onrender.com/api · [documentación](https://terrall-api.onrender.com/api/docs)
+
 ## Endpoints
 
 | Método y ruta | Descripción |
@@ -69,6 +71,17 @@ npm run test:e2e    # pruebas end-to-end; requieren la base con migraciones y se
 ```
 
 GitHub Actions ejecuta lint, build, pruebas unitarias y e2e con un PostgreSQL de servicio en cada cambio del backend.
+
+## Despliegue
+
+La API está desplegada en **Render** (plan gratuito, con Docker) y la base de datos en **Neon** (PostgreSQL), ambas en la costa este de EE. UU. La configuración está en [`render.yaml`](../render.yaml):
+
+- Render construye la imagen con `backend/Dockerfile` desde `develop` cuando pasan los checks de GitHub.
+- Al iniciar, el contenedor aplica las migraciones y carga el seed solo si la base está vacía.
+- `DATABASE_URL` se configura en Render y no se guarda en el repositorio; `CORS_ORIGINS` permite solo la demo en GitHub Pages.
+- En el plan gratuito el servicio se suspende tras 15 minutos sin uso; la primera petición después de eso tarda cerca de un minuto.
+
+Para recargar los datos (por ejemplo, tras actualizar el RNT), ejecuta el seed completo contra la base de producción desde tu equipo: `DATABASE_URL="<cadena de Neon>" npm run db:seed`.
 
 ## Decisiones técnicas
 
