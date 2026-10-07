@@ -15,5 +15,19 @@ services:
       timeout: 5s
       retries: 10
 
+  api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://terrall:terrall@db:5432/terrall?schema=public
+      PORT: 3000
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   terrall-db:
