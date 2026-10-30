@@ -2,7 +2,7 @@
 
 Mapa 3D interactivo de Colombia para explorar, departamento por departamento, información de transporte, turismo, educación y economía desde un solo lugar.
 
-**[Ver demo](https://hannasalinas.github.io/terrall/)** · **[API](https://terrall-api.onrender.com/api/docs)** · Estado: 🚧 en desarrollo
+**[Ver demo](https://hannasalinas.github.io/terrall/)** · **[API](https://terrall-api.onrender.com/api/docs)** (el primer arranque en Render puede tardar entre 45 segundos y un minuto) · Estado: 🚧 en desarrollo
 
 ![Mapa 3D de Colombia con los 33 departamentos extruidos y las principales ciudades marcadas](docs/capturas/mapa.png)
 
