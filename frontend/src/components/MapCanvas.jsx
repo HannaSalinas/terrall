@@ -14,7 +14,23 @@ export default function MapCanvas() {
   const label = hoveredCity ? hoveredCity.name : hoveredDept
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+    // overflow: hidden evita que el panel lateral, escondido a la derecha, agregue scroll horizontal
+    <div style={{ width: '100%', height: '100dvh', position: 'relative', overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute',
+        top: '16px',
+        left: '16px',
+        right: '16px',
+        zIndex: 10,
+        pointerEvents: 'none',
+      }}>
+        <h1 style={{ fontSize: '20px', fontWeight: 600, letterSpacing: '0.04em' }}>
+          Terrall · Mapa 3D de Colombia
+        </h1>
+        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginTop: '4px' }}>
+          Haz clic en un departamento para ver sus datos
+        </p>
+      </div>
       {!mapOffset && (
         <div style={{
           position: 'absolute',
@@ -35,7 +51,7 @@ export default function MapCanvas() {
       {label && (
         <div style={{
           position: 'absolute',
-          top: '24px',
+          bottom: '24px',
           left: '50%',
           transform: 'translateX(-50%)',
           background: hoveredCity ? 'rgba(255,200,0,0.15)' : 'rgba(0,0,0,0.7)',

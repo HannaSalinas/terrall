@@ -1,5 +1,5 @@
 // Cliente de la API de Terrall (backend/). Si VITE_API_URL no está definida,
-// como en la demo de GitHub Pages, el mapa trabaja solo con los datos estáticos.
+// el mapa trabaja solo con los datos estáticos.
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '')
 
 export const isApiEnabled = Boolean(API_URL)
